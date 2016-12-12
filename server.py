@@ -37,22 +37,22 @@ class Server:
     def run(self): 
         self.open_socket() 
         input = [self.server,sys.stdin] 
-        running = 1 
-        while running: 
-            inputready,outputready,exceptready = select.select(input,[],[]) 
+        running = 1
+        while running:
+            inputready,outputready,exceptready = select.select(input,[],[])
 
-            for s in inputready: 
+            for s in inputready:
 
-                if s == self.server: 
-                    # handle the server socket 
-                    c = Client(self.server.accept()) 
-                    c.start() 
-                    self.threads.append(c) 
+                if s == self.server:
+                    # handle the server socket
+                    c = Client(self.server.accept())
+                    c.start()
+                    self.threads.append(c)
 
-                elif s == sys.stdin: 
-                    # handle standard input 
-                    junk = sys.stdin.readline() 
-                    running = 0 
+                elif s == sys.stdin:
+                    # handle standard input
+                    junk = sys.stdin.readline()
+                    running = 0
 
         # close all threads 
 
