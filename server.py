@@ -14,7 +14,7 @@ import response as resp
 class Server: 
     def __init__(self): 
         self.host = '' 
-        self.port = 50000
+        self.port = 50001
         self.backlog = 5 
         self.size = 1024 
         self.server = None 
@@ -30,9 +30,9 @@ class Server:
                 self.server.close() 
             print "Could not open socket: " + message 
             sys.exit(1)
-        except KeyboardInterrupt:
-            self.server.close()
-            sys.exit(0)
+        # except KeyboardInterrupt:
+        #     self.server.close()
+        #     sys.exit(0)
 
     def run(self): 
         self.open_socket() 
