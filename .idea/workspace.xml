@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8944e8d0-4f1f-4fc6-a0c4-27271925d508" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/coba_bsoup.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.py" afterPath="$PROJECT_DIR$/server.py" />
     </list>
@@ -34,8 +33,8 @@
       <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="40" column="13" lean-forward="true" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
+            <state relative-caret-position="225">
+              <caret line="33" column="38" lean-forward="true" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
               <folding>
                 <element signature="e#173#186#0" expanded="true" />
               </folding>
@@ -323,7 +322,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481559761250</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add 404 &amp; 200 server response">
+      <created>1481739596081</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1481739596081</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -356,7 +362,8 @@
     <MESSAGE value="yang keyboard exception belum sip" />
     <MESSAGE value="update soal" />
     <MESSAGE value="file response.py gak dipake lagi, udah dijadiin satu" />
-    <option name="LAST_COMMIT_MESSAGE" value="file response.py gak dipake lagi, udah dijadiin satu" />
+    <MESSAGE value="add 404 &amp; 200 server response" />
+    <option name="LAST_COMMIT_MESSAGE" value="add 404 &amp; 200 server response" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -720,8 +727,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="40" column="13" lean-forward="true" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
+        <state relative-caret-position="225">
+          <caret line="33" column="38" lean-forward="true" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
           <folding>
             <element signature="e#173#186#0" expanded="true" />
           </folding>

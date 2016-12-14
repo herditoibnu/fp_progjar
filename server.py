@@ -37,7 +37,7 @@ class Response:
                 content = self.translate_php(path)
             else:
                 content = self.get_file(path)
-                self.response_type = '200'
+            self.response_type = '200'
         else:
             content = self.get_404()
             self.response_type = '404'
