@@ -18,8 +18,8 @@ class Response:
     def __init__(self, path):
         self.path = '.' + path
         self.content = str(self.read_content(self.path))
-        self.type = str(mimetypes.guess_type(self.path))
-        self.header = str(self.build_header(self.content, self.type))
+        self.file_type = str(mimetypes.guess_type(self.path))
+        self.header = str(self.build_header(self.content, self.file_type))
 
     def read_content(self, path):
         if os.path.isdir(path):
@@ -31,18 +31,25 @@ class Response:
                 content = self.refresh_directory(path)
             else:
                 content = self.get_directory_content(path)
+            self.response_type = '200'
         elif os.path.isfile(path):
             if os.path.splitext(path)[1] == '.php':
                 content = self.translate_php(path)
             else:
                 content = self.get_file(path)
+                self.response_type = '200'
         else:
             content = self.get_404()
+            self.response_type = '404'
         return content
 
-    def build_header(self, content, type):
-        header = 'HTTP/1.1 200 OK\r\nContent-Type: ' + type + '; charset=UTF-8\r\nContent-Length:' \
-                 + str(len(content)) + '\r\n\r\n'
+    def build_header(self, content, file_type):
+        if self.response_type == '200':
+            header = 'HTTP/1.1 200 OK\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+                     + str(len(content)) + '\r\n\r\n'
+        elif self.response_type == '404':
+            header = 'HTTP/1.1 404 NOT FOUND\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+                     + str(len(content)) + '\r\n\r\n'
         return header
 
     def get_file(self, path):
