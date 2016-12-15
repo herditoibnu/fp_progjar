@@ -15,6 +15,6 @@ request_header_all = request_header_type + request_header_path + request_header_
 client_socket.send(request_header_all)
 
 response = ''
-recv = client_socket.recv(10240)
+recv = client_socket.recv(1024)
 print recv
 client_socket.close()
