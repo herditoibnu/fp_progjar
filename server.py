@@ -20,7 +20,6 @@ class Response:
         self.content = str(self.read_content(self.path))
         self.file_type = str(mimetypes.guess_type(self.path))
         self.header = str(self.build_header(self.content, self.file_type))
-        self.cek_301 = 0
     def read_content(self, path):
         if os.path.isdir(path):
             if path == './dipindah/':
