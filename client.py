@@ -17,7 +17,7 @@ client_socket.send(request_header_all)
 response = ''
 recv = client_socket.recv(1024)
 print recv
-
+print haha
 # content_type = recv.split('Content-Type:')[1].split(';')[0].strip()
 # content_length = recv.split('Content-Length:')[1].split('\n')[0].strip()
 # print content_type
