@@ -20,18 +20,23 @@ class Response:
         self.content = str(self.read_content(self.path))
         self.file_type = str(mimetypes.guess_type(self.path))
         self.header = str(self.build_header(self.content, self.file_type))
-
+        self.cek_301 = 0
     def read_content(self, path):
         if os.path.isdir(path):
-            if os.path.exists(path + '/index.html'):
+            if path == './dipindah/':
+                content = self.refresh_terpindah(path)
+            elif os.path.exists(path + '/index.html'):
                 content = self.get_index_html(path)
+                self.response_type = '200'
             elif os.path.exists(path + '/index.php'):
                 content = self.translate_index_php(path)
+                self.response_type = '200'
             elif path[-1:] != '/':
                 content = self.refresh_directory(path)
+                self.response_type = '200'
             else:
                 content = self.get_directory_content(path)
-            self.response_type = '200'
+                self.response_type = '200'
         elif os.path.isfile(path):
             if os.path.splitext(path)[1] == '.php':
                 content = self.translate_php(path)
@@ -49,6 +54,9 @@ class Response:
                      + str(len(content)) + '\r\n\r\n'
         elif self.response_type == '404':
             header = 'HTTP/1.1 404 NOT FOUND\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+                     + str(len(content)) + '\r\n\r\n'
+        elif self.response_type == '301':
+            header = 'HTTP/1.1 301 MOVED PERMANENTLY\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
                      + str(len(content)) + '\r\n\r\n'
         return header
 
@@ -74,6 +82,9 @@ class Response:
     def refresh_directory(self, path):
         return '<html><head> <meta http-equiv="refresh" content="0; url= ' + path[1:] + '/"/> </head><body></body></html>'
 
+    def refresh_terpindah(self, path):
+        return '<html><head> <meta http-equiv="refresh" content="0; url= ' + '/terpindah' + '/"/> </head><body></body></html>'
+
     def get_directory_content(self, path):
         datas = os.listdir('./'+path)
         list_file = ""
@@ -91,7 +102,7 @@ class Server:
         self.host = '' 
         self.port = 50001
         self.backlog = 5 
-        self.size = 1024 
+        self.size = 1024
         self.server = None 
         self.threads = [] 
 
@@ -137,7 +148,7 @@ class Client(threading.Thread):
         threading.Thread.__init__(self) 
         self.client = client 
         self.address = address 
-        self.size = 1024 
+        self.size = 1024
 
     def run(self): 
         running = 1 
