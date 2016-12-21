@@ -20,11 +20,10 @@ class Response:
         self.content = str(self.read_content(self.path))
         self.file_type = str(mimetypes.guess_type(self.path))
         self.header = str(self.build_header(self.content, self.file_type))
+
     def read_content(self, path):
         if os.path.isdir(path):
-            if path == './dipindah/':
-                content = self.refresh_terpindah(path)
-            elif os.path.exists(path + '/index.html'):
+            if os.path.exists(path + '/index.html'):
                 content = self.get_index_html(path)
                 self.response_type = '200'
             elif os.path.exists(path + '/index.php'):
@@ -37,11 +36,15 @@ class Response:
                 content = self.get_directory_content(path)
                 self.response_type = '200'
         elif os.path.isfile(path):
-            if os.path.splitext(path)[1] == '.php':
+            if path == './dipindah.html':
+                content = self.get_301()
+                self.response_type = '301'
+            elif os.path.splitext(path)[1] == '.php':
                 content = self.translate_php(path)
+                self.response_type = '200'
             else:
                 content = self.get_file(path)
-            self.response_type = '200'
+                self.response_type = '200'
         else:
             content = self.get_404()
             self.response_type = '404'
@@ -78,11 +81,11 @@ class Response:
     def get_404(self):
         return self.get_file('./404.html')
 
+    def get_301(self):
+        return self.get_file('./kepindah.html')
+
     def refresh_directory(self, path):
         return '<html><head> <meta http-equiv="refresh" content="0; url= ' + path[1:] + '/"/> </head><body></body></html>'
-
-    def refresh_terpindah(self, path):
-        return '<html><head> <meta http-equiv="refresh" content="0; url= ' + '/terpindah' + '/"/> </head><body></body></html>'
 
     def get_directory_content(self, path):
         datas = os.listdir('./'+path)
@@ -99,7 +102,7 @@ class Response:
 class Server: 
     def __init__(self): 
         self.host = '' 
-        self.port = 50001
+        self.port = 50002
         self.backlog = 5 
         self.size = 1024
         self.server = None 
