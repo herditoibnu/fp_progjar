@@ -438,7 +438,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482519000480</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="folder dipindah sama kepindah dihapus">
+      <created>1482519112149</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1482519112149</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -497,7 +504,8 @@
     <MESSAGE value="cek 301 hapus" />
     <MESSAGE value="kalau ke dipindah.html, nanti move permanently ke kepindah.html" />
     <MESSAGE value="gak mau buka folder dilarang, 403 nanti" />
-    <option name="LAST_COMMIT_MESSAGE" value="gak mau buka folder dilarang, 403 nanti" />
+    <MESSAGE value="folder dipindah sama kepindah dihapus" />
+    <option name="LAST_COMMIT_MESSAGE" value="folder dipindah sama kepindah dihapus" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
