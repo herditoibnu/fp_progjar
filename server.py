@@ -23,7 +23,10 @@ class Response:
 
     def read_content(self, path):
         if os.path.isdir(path):
-            if os.path.exists(path + '/index.html'):
+            if path == './dilarang/':
+                content = self.get_403()
+                self.response_type = '403'
+            elif os.path.exists(path + '/index.html'):
                 content = self.get_index_html(path)
                 self.response_type = '200'
             elif os.path.exists(path + '/index.php'):
@@ -54,11 +57,14 @@ class Response:
         if self.response_type == '200':
             header = 'HTTP/1.1 200 OK\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
                      + str(len(content)) + '\r\n\r\n'
-        elif self.response_type == '404':
-            header = 'HTTP/1.1 404 NOT FOUND\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
-                     + str(len(content)) + '\r\n\r\n'
         elif self.response_type == '301':
-            header = 'HTTP/1.1 301 MOVED PERMANENTLY\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+            header = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+                     + str(len(content)) + '\r\n\r\n'
+        elif self.response_type == '403':
+            header = 'HTTP/1.1 403 Forbidden\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+                     + str(len(content)) + '\r\n\r\n'
+        elif self.response_type == '404':
+            header = 'HTTP/1.1 404 Not Found\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
                      + str(len(content)) + '\r\n\r\n'
         return header
 
@@ -78,11 +84,14 @@ class Response:
     def translate_index_php(self, path):
         return self.translate_php(path + '/index.php')
 
-    def get_404(self):
-        return self.get_file('./404.html')
-
     def get_301(self):
         return self.get_file('./kepindah.html')
+
+    def get_403(self):
+        return self.get_file('./403.html')
+
+    def get_404(self):
+        return self.get_file('./404.html')
 
     def refresh_directory(self, path):
         return '<html><head> <meta http-equiv="refresh" content="0; url= ' + path[1:] + '/"/> </head><body></body></html>'
