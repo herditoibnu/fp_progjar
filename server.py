@@ -110,70 +110,77 @@ class Response:
 
 class Server: 
     def __init__(self): 
-        self.host = '' 
-        self.port = 50002
-        self.backlog = 5 
+        self.host = ''
+        self.port = 50001
+        self.backlog = 5
         self.size = 1024
-        self.server = None 
-        self.threads = [] 
+        self.server = None
+        self.threads = []
 
-    def open_socket(self): 
-        try: 
-            self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-            self.server.bind((self.host,self.port)) 
-            self.server.listen(5) 
-        except socket.error, (value,message): 
-            if self.server: 
-                self.server.close() 
-            print "Could not open socket: " + message 
+    def open_socket(self):
+        try:
+            self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server.bind((self.host,self.port))
+            self.server.listen(5)
+        except socket.error, (value,message):
+            if self.server:
+                self.server.close()
+            print "Could not open socket: " + message
             sys.exit(1)
 
-    def run(self): 
-        self.open_socket() 
-        input = [self.server,sys.stdin] 
+    def run(self):
+        self.open_socket()
+        input = [self.server,sys.stdin]
         running = 1
         while running:
-            inputready,outputready,exceptready = select.select(input,[],[])
+            try:
+                inputready,outputready,exceptready = select.select(input,[],[])
 
-            for s in inputready:
+                for s in inputready:
 
-                if s == self.server:
-                    # handle the server socket
-                    c = Client(self.server.accept())
-                    c.start()
-                    self.threads.append(c)
+                    if s == self.server:
+                        # handle the server socket
+                        c = Client(self.server.accept())
+                        c.start()
+                        self.threads.append(c)
 
-                elif s == sys.stdin:
-                    # handle standard input
-                    junk = sys.stdin.readline()
-                    running = 0
+                    elif s == sys.stdin:
+                        # handle standard input
+                        junk = sys.stdin.readline()
+                        running = 0
+            except KeyboardInterrupt:
+                print '>> Exit from keyboard. Shut down server'
+                running = 0
+        # close all threads
 
-        # close all threads 
+        self.server.close()
+        for c in self.threads:
+            c.join()
 
-        self.server.close() 
-        for c in self.threads: 
-            c.join() 
-
-class Client(threading.Thread): 
-    def __init__(self,(client,address)): 
-        threading.Thread.__init__(self) 
-        self.client = client 
-        self.address = address 
+class Client(threading.Thread):
+    def __init__(self,(client,address)):
+        threading.Thread.__init__(self)
+        self.client = client
+        self.address = address
         self.size = 1024
 
-    def run(self): 
-        running = 1 
-        while running: 
-            data = self.client.recv(self.size) 
+    def run(self):
+        running = 1
+        while running:
+            data = self.client.recv(self.size)
             if data:
                 request_header = data.split('\r\n')
                 request_file = request_header[0].split()[1].replace('%20', ' ')
                 response = Response(request_file)
-                self.client.sendall(response.header + response.content)
+                if data[0][0] == 'G':
+                    self.client.sendall(response.header + response.content)
+                elif data[0][0] == 'H':
+                    self.client.sendall(response.header)
                 #self.client.send(data)
-            else: 
-                self.client.close() 
-                running = 0 
+            else:
+                self.client.close()
+                s.threads.remove(self)
+                running = 0
 
 if __name__ == "__main__": 
     s = Server() 

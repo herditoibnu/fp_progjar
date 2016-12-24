@@ -32,6 +32,7 @@ Ketentuannya adalah mengimplementasikan RFC 2616 (dituliskan dengan subbab) seba
 - Status code: 200, 301, 403, 404, 500 (10.2.1, 10.3.2, 10.4.4, 10.4.5, 10.5.1)
 - Menerapkan teknik multiclient dengan modul select DAN thread
 //202 OK, 301 Moved Permanently, 403 Forbidden, 404 NOT FOUND, 500 Internal Server Error
+//referensi, ada remove thread sama KeyboardInterrupt: https://github.com/aprex/python_chat/blob/master/echoserver-threads.py
 
 [Membuat Game Berbasis Jaringan]
 - Fokus pada pemrograman jaringan, bukan pada grafis atau game play
