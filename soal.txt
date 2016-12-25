@@ -33,6 +33,13 @@ Ketentuannya adalah mengimplementasikan RFC 2616 (dituliskan dengan subbab) seba
 - Menerapkan teknik multiclient dengan modul select DAN thread
 //202 OK, 301 Moved Permanently, 403 Forbidden, 404 NOT FOUND, 500 Internal Server Error
 //referensi, ada remove thread sama KeyboardInterrupt: https://github.com/aprex/python_chat/blob/master/echoserver-threads.py
+------------
+Note:
+- Kalau buka dipindah.html, nanti redirect ke kepindah.html (301)
+- Kalau matiin server tapi udah buka di browser, browsernya matiin juga
+Yang belum:
+- 500
+- method POST
 
 [Membuat Game Berbasis Jaringan]
 - Fokus pada pemrograman jaringan, bukan pada grafis atau game play

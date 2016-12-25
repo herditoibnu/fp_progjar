@@ -149,7 +149,7 @@ class Server:
                         junk = sys.stdin.readline()
                         running = 0
             except KeyboardInterrupt:
-                print '>> Exit from keyboard. Shut down server'
+                print '>> Shut down server...'
                 running = 0
         # close all threads
 
