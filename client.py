@@ -17,9 +17,12 @@ request_header_all = request_header_type + ' /' + request_header_path + request_
 
 
 if(request_header_type == 'POST'):
-    argName = raw_input('input name: ')
-    argEmail = raw_input('input email: ')
-    request_header_all = request_header_all +  'name='+argName + '&email='+argEmail
+    argNumber = int(raw_input('number of arguments: '))
+    argv = ''
+    for i in range(1,argNumber+1):
+        arg = raw_input('argument ' + str(i) + ': ')
+        argv += '&arg' + str(i) + '=' + arg
+    request_header_all = request_header_all + argv[1:]
 
 print request_header_all
 client_socket.send(request_header_all)

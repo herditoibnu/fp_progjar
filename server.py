@@ -112,13 +112,15 @@ class Response:
 class PostResponse(Response):
 
     def set(self, argv):
+        self.argv = ''
         argv = argv.split('&')
         print argv
-        self.name = argv[0].split('=')[1]
-        self.email = argv[1].split('=')[1]
+        for i in range(len(argv)):
+            argv[i] = argv[i].split('=')[1]
+            self.argv += ' ' + argv[i]
 
     def translate_php(self, path):
-        proc = subprocess.Popen("php " + path + ' ' + self.name + ' ' + self.email, shell=True, stdout=subprocess.PIPE)
+        proc = subprocess.Popen("php " + path + self.argv, shell=True, stdout=subprocess.PIPE)
         return proc.stdout.read()
 
 
