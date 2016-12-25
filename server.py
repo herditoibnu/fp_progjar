@@ -12,9 +12,17 @@ import threading
 import mimetypes
 import os
 import subprocess
+import time
 
 
 class Response:
+
+    status200 = '200 OK'
+    status301 = '301 Moved Permanently'
+    status403 = '403 Forbidden'
+    status404 = '404 Not Found'
+    status500 = '500 Internal Server Error'
+
     def __init__(self, path):
         self.path = '.' + path
 
@@ -27,46 +35,39 @@ class Response:
         if os.path.isdir(path):
             if path == './dilarang/':
                 content = self.get_403()
-                self.response_type = '403'
+                self.response_type = self.status403
+            elif path == './error/':
+                content = self.get_500()
+                self.response_type = self.status500
             elif os.path.exists(path + '/index.html'):
                 content = self.get_index_html(path)
-                self.response_type = '200'
+                self.response_type = self.status200
             elif os.path.exists(path + '/index.php'):
                 content = self.translate_index_php(path)
-                self.response_type = '200'
+                self.response_type = self.status200
             elif path[-1:] != '/':
                 content = self.refresh_directory(path)
-                self.response_type = '200'
+                self.response_type = self.status200
             else:
                 content = self.get_directory_content(path)
-                self.response_type = '200'
+                self.response_type = self.status200
         elif os.path.isfile(path):
             if path == './dipindah.html':
                 content = self.get_301()
-                self.response_type = '301'
+                self.response_type = self.status301
             elif os.path.splitext(path)[1] == '.php':
                 content = self.translate_php(path)
-                self.response_type = '200'
+                self.response_type = self.status200
             else:
                 content = self.get_file(path)
-                self.response_type = '200'
+                self.response_type = self.status200
         else:
             content = self.get_404()
-            self.response_type = '404'
+            self.response_type = self.status404
         return content
 
     def build_header(self, content, file_type):
-        if self.response_type == '200':
-            header = 'HTTP/1.1 200 OK\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
-                     + str(len(content)) + '\r\n\r\n'
-        elif self.response_type == '301':
-            header = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
-                     + str(len(content)) + '\r\n\r\n'
-        elif self.response_type == '403':
-            header = 'HTTP/1.1 403 Forbidden\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
-                     + str(len(content)) + '\r\n\r\n'
-        elif self.response_type == '404':
-            header = 'HTTP/1.1 404 Not Found\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
+        header = 'HTTP/1.1 ' + self.response_type + '\r\nContent-Type: ' + file_type + '; charset=UTF-8\r\nContent-Length:' \
                      + str(len(content)) + '\r\n\r\n'
         return header
 
@@ -94,6 +95,9 @@ class Response:
 
     def get_404(self):
         return self.get_file('./404.html')
+
+    def get_500(self):
+        return self.get_file('./500.html')
 
     def refresh_directory(self, path):
         return '<html><head> <meta http-equiv="refresh" content="0; url= ' + path[1:] + '/"/> </head><body></body></html>'
@@ -190,7 +194,10 @@ class Client(threading.Thread):
                 if data[:3] == 'GET':
                     response = Response(request_file)
                     response.start()
-                    self.client.sendall(response.header + response.content)
+                    self.client.send(response.header)
+                    time.sleep(1)
+                    self.client.send(response.content)
+                    time.sleep(1)
                 elif data[:4] == 'HEAD':
                     response = Response(request_file)
                     response.start()
@@ -200,7 +207,10 @@ class Client(threading.Thread):
                     response = PostResponse(request_file)
                     response.set(argv)
                     response.start()
-                    self.client.sendall(response.content)
+                    self.client.send(response.header)
+                    time.sleep(1)
+                    self.client.send(response.content)
+                    time.sleep(1)
                 else:
                     self.client.sendall('Invalid method')
 

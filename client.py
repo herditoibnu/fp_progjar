@@ -29,8 +29,31 @@ client_socket.send(request_header_all)
 
 response = ''
 recv = client_socket.recv(1024)
-# soup = BeautifulSoup(recv)
-# print soup.get_text()
-print recv
 
-client_socket.close()
+cut = recv.split("\r\n");
+
+if request_header_type == "GET" or request_header_type == "POST":
+	#print recv
+	type_file = cut[1]
+	try:
+		type_file = type_file.split("'")[1]
+	except Exception:
+		type_file = "text/"
+
+	sizefile = cut[2]
+	sizefile = sizefile.split("Content-Length:")[1]
+	buff = int(sizefile)
+	print recv
+	if type_file[:5] != "text/":
+		fname = request_header_path.split("/")[-1]
+		filename = "Downloads/"+ fname
+		save = open(filename,"w+")
+		while buff > 0:
+			isi = client_socket.recv(1024)
+			save.write(isi)
+			buff-=1024
+		print("data downloaded")
+		save.close()
+	else:
+		isi = client_socket.recv(1024)
+		print isi
