@@ -17,6 +17,8 @@ import subprocess
 class Response:
     def __init__(self, path):
         self.path = '.' + path
+
+    def start(self):
         self.content = str(self.read_content(self.path))
         self.file_type = str(mimetypes.guess_type(self.path))
         self.header = str(self.build_header(self.content, self.file_type))
@@ -107,11 +109,23 @@ class Response:
         content = '<html>' + list_file + '</html>'
         return content
 
+class PostResponse(Response):
+
+    def set(self, argv):
+        argv = argv.split('&')
+        print argv
+        self.name = argv[0].split('=')[1]
+        self.email = argv[1].split('=')[1]
+
+    def translate_php(self, path):
+        proc = subprocess.Popen("php " + path + ' ' + self.name + ' ' + self.email, shell=True, stdout=subprocess.PIPE)
+        return proc.stdout.read()
+
 
 class Server: 
     def __init__(self): 
         self.host = ''
-        self.port = 50001
+        self.port = 50008
         self.backlog = 5
         self.size = 1024
         self.server = None
@@ -171,12 +185,23 @@ class Client(threading.Thread):
             if data:
                 request_header = data.split('\r\n')
                 request_file = request_header[0].split()[1].replace('%20', ' ')
-                response = Response(request_file)
-                if data[0][0] == 'G':
+                if data[:3] == 'GET':
+                    response = Response(request_file)
+                    response.start()
                     self.client.sendall(response.header + response.content)
-                elif data[0][0] == 'H':
+                elif data[:4] == 'HEAD':
+                    response = Response(request_file)
+                    response.start()
                     self.client.sendall(response.header)
-                #self.client.send(data)
+                elif data[:4] == 'POST':
+                    argv = request_header[-1]
+                    response = PostResponse(request_file)
+                    response.set(argv)
+                    response.start()
+                    self.client.sendall(response.content)
+                else:
+                    self.client.sendall('Invalid method')
+
             else:
                 self.client.close()
                 s.threads.remove(self)
