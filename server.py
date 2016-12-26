@@ -128,8 +128,8 @@ class PostResponse(Response):
         return proc.stdout.read()
 
 
-class Server: 
-    def __init__(self): 
+class Server:
+    def __init__(self):
         self.host = ''
         self.port = 50008
         self.backlog = 5
