@@ -47,9 +47,9 @@ try:
                 filename = "Downloads/"+ fname
                 save = open(filename,"w+")
                 while buff > 0:
-                    isi = client_socket.recv(1024)
+                    isi = client_socket.recv(128)
                     save.write(isi)
-                    buff-=1024
+                    buff-=128
                 print("data downloaded")
                 save.close()
             else:
