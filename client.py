@@ -56,6 +56,8 @@ try:
                 isi = client_socket.recv(1024)
                 soup = BeautifulSoup(isi,'lxml')
                 print soup.get_text()
+        else:
+            print recv
 except KeyboardInterrupt:
     client_socket.close()
     sys.exit(0)
