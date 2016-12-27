@@ -45,7 +45,7 @@ try:
             if type_file[:5] != "text/":
                 fname = request_header_path.split("/")[-1]
                 filename = "Downloads/"+ fname
-                save = open(filename,"w+")
+                save = open(filename,"wb+")
                 while buff > 0:
                     isi = client_socket.recv(128)
                     save.write(isi)
